@@ -1,0 +1,1 @@
+# Qwen2-7B WSL CPU
