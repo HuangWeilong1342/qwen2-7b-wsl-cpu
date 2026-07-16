@@ -1,5 +1,6 @@
 import requests
 
+from backend.utils.logger import logger
 from backend.services.prompt import load_system_prompt
 from backend.services.history import (
     get_history,
@@ -10,6 +11,8 @@ from backend.config import *
 
 
 def chat(message: str):
+
+    logger.info(f"User: {message}")
 
     # 读取 System Prompt
     system_prompt = load_system_prompt()
@@ -46,17 +49,32 @@ def chat(message: str):
         "max_tokens": MAX_TOKENS
     }
 
-    response = requests.post(
-        LLM_API_URL,
-        json=payload,
-        timeout=TIMEOUT
-    )
+    try:
+        response = requests.post(
+            LLM_API_URL,
+            json=payload,
+            timeout=TIMEOUT
+        )
 
-    response.raise_for_status()
+        response.raise_for_status()
+
+    except requests.exceptions.ConnectionError:
+        logger.error("Cannot connect to llama-server.")
+        return "错误：无法连接到 llama-server。"
+
+    except requests.exceptions.Timeout:
+        logger.error("Request timeout.")
+        return "错误：模型响应超时。"
+
+    except requests.exceptions.RequestException as e:
+        logger.error(str(e))
+        return "错误：请求失败。"
 
     result = response.json()
 
     answer = result["choices"][0]["message"]["content"]
+
+    logger.info(f"Assistant: {answer}")
 
     # 保存 AI 回复
     add_message(
