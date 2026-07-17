@@ -1,7 +1,7 @@
 import requests
 
 from backend.utils.logger import logger
-from backend.services.prompt import load_system_prompt
+from backend.services.rag import RAGService
 from backend.services.history import (
     get_history,
     add_message
@@ -13,17 +13,10 @@ from backend.config import *
 def chat(message: str):
 
     logger.info(f"User: {message}")
+    rag = RAGService()
+    rag_prompt = rag.build_prompt(message)
 
-    # 读取 System Prompt
-    system_prompt = load_system_prompt()
-
-    # 构造 messages
-    messages = [
-        {
-            "role": "system",
-            "content": system_prompt
-        }
-    ]
+    messages = []
 
     # 添加历史记录
     messages.extend(get_history())
@@ -32,7 +25,7 @@ def chat(message: str):
     messages.append(
         {
             "role": "user",
-            "content": message
+            "content": rag_prompt
         }
     )
 
