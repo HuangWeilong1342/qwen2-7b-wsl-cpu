@@ -1,86 +1,86 @@
-# 基于 llama.cpp 构建本地 RAG 问答系统（Qwen2-7B）
+# 基于 llama.cpp 构建本地 RAG 知识库问答系统
 
-## 项目简介
+> 基于 **llama.cpp**、**Qwen2-7B-Instruct GGUF**、**FastAPI**、**Sentence Transformers** 和 **FAISS** 构建的本地 RAG（Retrieval-Augmented Generation）知识库问答系统，支持 PDF 知识库管理、向量检索以及本地大模型问答，全程离线运行，无需依赖第三方大模型 API。
 
-本项目基于 **llama.cpp** 推理框架，在 **WSL2 Ubuntu** 环境下部署 **Qwen2-7B-Instruct GGUF**，并使用 **FastAPI** 构建本地 AI 服务，最终实现一个支持 **RAG（Retrieval-Augmented Generation）** 的本地知识库问答系统。
+---
 
-整个项目从模型部署开始，逐步完成：
+# 项目简介
 
-- 本地大模型部署
+本项目从零开始完成了本地大模型部署，并在此基础上构建了一个完整的 RAG（检索增强生成）知识库问答系统。
+
+整个系统包括：
+
+- 本地部署 Qwen2-7B-Instruct GGUF
+- llama.cpp CPU 推理
 - OpenAI Compatible API
-- FastAPI 后端
+- FastAPI 后端服务
 - Prompt Template
-- 多轮对话
-- PDF 知识库
-- Embedding
-- FAISS 检索
-- Web 前端
+- 多轮对话（Conversation History）
+- PDF 知识库管理
+- Embedding 向量化
+- FAISS 向量数据库
+- Retriever 检索
+- RAG 问答
+- PDF 上传与删除
+- 自动重建向量索引
 
-项目主要用于学习大模型部署、RAG 系统开发及工程化实践。
+项目主要用于：
 
----
-
-# 当前开发进度
-
-## 第一阶段：本地部署（已完成）
-
-- [x] WSL2 Ubuntu 环境搭建
-- [x] 编译 llama.cpp
-- [x] 下载 Qwen2-7B GGUF
-- [x] CPU 推理
-- [x] Benchmark 测试
-- [x] llama-server 部署
-- [x] OpenAI Compatible API
+- 大模型本地部署实践
+- RAG 系统开发学习
+- AI 工程化实践
+- 考研（计算机 / 人工智能）项目展示
 
 ---
 
-## 第二阶段：FastAPI 服务（已完成）
+# 系统架构
 
-- [x] FastAPI 项目搭建
-- [x] Chat API
-- [x] 配置文件管理
-- [x] Prompt Template
-- [x] 多轮对话 History
-- [x] 日志(Log)
-- [x] 异常处理
-- [x] Swagger API 文档
-
-目前访问：
-
+```text
+                 FastAPI API
+                      │
+         Conversation History
+                      │
+               RAG Pipeline
+                      │
+              FAISS Retriever
+                      │
+       BGE Embedding Model
+                      │
+          PDF Knowledge Base
+                      │
+     llama-server(OpenAI API)
+                      │
+      Qwen2-7B-Instruct GGUF
+                      │
+                llama.cpp
+                      │
+              WSL2 Ubuntu
 ```
-http://127.0.0.1:8000/docs
-```
-
-即可进行在线测试。
 
 ---
 
-## 第三阶段：RAG（开发中）
+# 项目功能
 
-目前完成：
+目前已经实现：
 
-- [x] PDF Loader
-- [x] PDF 文本读取
-- [x] Recursive Text Splitter
-- [x] Embedding Model（BGE-small-zh-v1.5）
-- [x] 文本向量生成
-
-正在开发：
-
-- [ ] FAISS 向量数据库
-- [ ] Top-K 检索
-- [ ] Prompt 拼接
-- [ ] RAG 问答
-
----
-
-## 第四阶段：Web 前端（计划）
-
-- [ ] Vue3
-- [ ] 在线聊天
-- [ ] 文件上传
-- [ ] PDF 管理
-- [ ] 知识库管理
+- ✅ Qwen2-7B 本地部署（GGUF）
+- ✅ CPU 推理
+- ✅ llama-server 服务
+- ✅ OpenAI Compatible API
+- ✅ FastAPI 后端
+- ✅ Prompt Template
+- ✅ 多轮对话（Conversation History）
+- ✅ PDF Loader
+- ✅ Text Splitter
+- ✅ Embedding（BGE-small-zh-v1.5）
+- ✅ FAISS 向量数据库
+- ✅ Retriever 检索
+- ✅ RAG 问答
+- ✅ PDF 上传
+- ✅ PDF 删除
+- ✅ 查看知识库
+- ✅ 自动重建向量索引
+- ✅ Swagger API 文档
 
 ---
 
@@ -90,72 +90,116 @@ http://127.0.0.1:8000/docs
 |------|------|
 | 操作系统 | WSL2 Ubuntu 24.04 |
 | 推理框架 | llama.cpp |
-| 模型 | Qwen2-7B-Instruct GGUF |
-| Web | FastAPI |
-| Prompt | Prompt Template |
-| Embedding | BGE-small-zh-v1.5 |
+| 大语言模型 | Qwen2-7B-Instruct GGUF |
+| 后端框架 | FastAPI |
+| Embedding | BAAI/bge-small-zh-v1.5 |
+| 向量数据库 | FAISS |
 | 文本处理 | LangChain |
-| 向量数据库 | FAISS（开发中） |
-| 前端 | Vue3（计划） |
+| PDF 解析 | PyMuPDF |
+| 开发语言 | Python / C++ / Shell |
 
 ---
 
 # 项目目录
 
 ```text
-qwen2-7b-wsl-cpu
+local-rag-qa-system
 │
 ├── backend
 │   ├── routers
+│   ├── schemas
 │   ├── services
-│   ├── utils
 │   ├── prompts
+│   ├── utils
 │   ├── config.py
 │   └── main.py
 │
 ├── data
-│   └── pdf
-│
-├── tests
-│
-├── docs
+│   ├── pdf
+│   └── faiss
 │
 ├── scripts
-│
-├── benchmark
-│
+├── tests
+├── docs
 ├── screenshots
 │
-└── README.md
+├── README.md
+├── LICENSE
+└── .gitignore
 ```
 
 ---
 
-# 项目功能
+# 快速开始
 
-目前已经实现：
+## 1. 启动 llama-server
 
-✅ 本地部署 Qwen2-7B
+```bash
+bash scripts/server.sh
+```
 
-✅ CPU 推理
+## 2. 启动 FastAPI
 
-✅ OpenAI API
+```bash
+uvicorn backend.main:app --reload
+```
 
-✅ FastAPI 后端
+## 3. 打开 Swagger
 
-✅ Prompt Template
+浏览器访问：
 
-✅ 多轮上下文
+```text
+http://127.0.0.1:8000/docs
+```
 
-✅ 日志系统
+---
 
-✅ 异常处理
+# API 接口
 
-✅ PDF 加载
+| 方法 | 接口 | 说明 |
+|------|------|------|
+| POST | /chat | RAG 问答 |
+| POST | /upload | 上传 PDF |
+| GET | /documents | 查看知识库 |
+| DELETE | /documents/{filename} | 删除 PDF |
 
-✅ PDF 文本切分
+---
 
-✅ Embedding 向量生成
+# 系统流程
+
+上传知识库：
+
+```text
+PDF
+ │
+Loader
+ │
+Text Splitter
+ │
+Embedding
+ │
+FAISS
+ │
+保存索引
+```
+
+问答流程：
+
+```text
+用户问题
+      │
+Embedding
+      │
+FAISS 检索
+      │
+Retriever
+      │
+Prompt Template
+      │
+Qwen2-7B
+      │
+返回答案
+```
 
 ---
 
@@ -163,79 +207,25 @@ qwen2-7b-wsl-cpu
 
 后续补充：
 
+- 系统架构
 - llama.cpp 推理
 - Swagger API
-- Prompt Template
-- History
-- PDF Loader
-- Embedding
-- FAISS 检索
-- Web Chat
-
----
-
-# 后续开发计划
-
-## RAG
-
-- FAISS 建库
-- 文档索引
-- Top-K 检索
-- Prompt 拼接
-- RAG Chat
-
-## Web
-
-- Vue3 前端
-- 文件上传
-- PDF 管理
+- PDF 上传
 - 知识库管理
-- 在线聊天
+- RAG 问答
 
 ---
 
 # 第三方开源项目
 
-### llama.cpp
-
-https://github.com/ggml-org/llama.cpp
-
-License：MIT
-
----
-
-### Qwen2
-
-https://github.com/QwenLM/Qwen3
-
-License：Apache License 2.0
-
----
-
-### LangChain
-
-https://github.com/langchain-ai/langchain
-
-License：MIT
-
----
-
-### Sentence Transformers
-
-https://github.com/UKPLab/sentence-transformers
-
-License：Apache License 2.0
-
----
-
-### FAISS
-
-https://github.com/facebookresearch/faiss
-
-License：MIT
+- **llama.cpp**（MIT License）
+- **Qwen**（Apache License 2.0）
+- **LangChain**（MIT License）
+- **Sentence Transformers**（Apache License 2.0）
+- **FAISS**（MIT License）
 
 ---
 
 # License
 
-MIT License
+本项目采用 **MIT License** 开源协议。
