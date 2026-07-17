@@ -8,7 +8,7 @@ text = load_pdf("data/pdf/test.pdf")
 # 切分
 chunks = split_text(text)
 
-# 加载模型
+# 加载模型  
 model = EmbeddingModel()
 
 # 编码
