@@ -2,9 +2,9 @@
 
 set -e
 
-export LD_LIBRARY_PATH=$HOME/qwen_lab/llama.cpp/build/bin:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$HOME/llm_lab/llama.cpp/build/bin:$LD_LIBRARY_PATH
 
-LLAMA_DIR="$HOME/qwen_lab/llama.cpp"
+LLAMA_DIR="$HOME/llm_lab/llama.cpp"
 MODEL="../models/qwen2-7b-instruct-q4_k_m.gguf"
 
 echo "========================================"

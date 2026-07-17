@@ -6,7 +6,7 @@ echo "========================================"
 echo "Building llama.cpp..."
 echo "========================================"
 
-LLAMA_DIR="$HOME/qwen_lab/llama.cpp"
+LLAMA_DIR="$HOME/llm_lab/llama.cpp"
 
 cd "$LLAMA_DIR"
 

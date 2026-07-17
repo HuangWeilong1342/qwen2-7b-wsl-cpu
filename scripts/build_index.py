@@ -5,9 +5,7 @@ from backend.services.splitter import split_text
 from backend.services.embedding import EmbeddingModel
 from backend.services.vector_store import VectorStore
 
-
 PDF_DIR = Path("data/pdf")
-
 
 def build_index():
     all_chunks = []
