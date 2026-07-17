@@ -8,7 +8,7 @@ class EmbeddingModel:
         logger.info("Loading embedding model...")
 
         self.model = SentenceTransformer(
-         "/home/yebai/qwen_lab/models/bge-small-zh-v1.5"
+         "/home/yebai/llm_lab/models/bge-small-zh-v1.5"
         )
 
         logger.info("Embedding model loaded.")
